@@ -2,12 +2,14 @@ import app.basic
 import tornado.web
 import lib.pg
 import functools
+import inspect
 
 import models.courses.courses as model
 import models.courses.courses_functions as model_functions
 
 class CoursesHandler(app.basic.BaseHandler):
     pgquery = lib.pg.PGQuery(model, model_functions)
+    query_arguments = inspect.getmembers(model_functions, inspect.isfunction)
 
     @tornado.web.asynchronous
     def get(self):
@@ -17,7 +19,7 @@ class CoursesHandler(app.basic.BaseHandler):
         page = self.get_int_argument("page", 0)
         pretty = self.get_bool_argument("pretty", None)
         if not queries:
-            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
+            return self.render('docs.html', endpoint='courses', params=self.query_arguments)
         internal_callback = functools.partial(self._finish, pretty=pretty)
         self.pgquery.execute(queries, page=page, limit=limit, callback=internal_callback)
 

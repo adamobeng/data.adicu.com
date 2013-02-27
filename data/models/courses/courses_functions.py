@@ -11,6 +11,7 @@
 #    raise Exception("Invalid query")
 
 def building(value):
+    """The building the course is held in."""
     return value, "Building1=%(building)s"
     
 def call_number(value):
