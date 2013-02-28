@@ -10,6 +10,8 @@ class CoursesHandler(app.basic.BaseHandler):
     pgquery = lib.pg.PGQuery(model, model_functions)
 
     @tornado.web.asynchronous
+    @app.basic.validate_token
+    @app.basic.format_api_errors
     def get(self):
         recognized_arguments = self.valid_query_arguments(model_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
