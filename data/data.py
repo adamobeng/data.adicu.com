@@ -10,6 +10,7 @@ import app.courses
 import app.affairs
 import app.dining
 import app.athletics
+import app.auth
 
 
 class Application(tornado.web.Application):
@@ -19,10 +20,11 @@ class Application(tornado.web.Application):
         app_settings = {
             'debug': "dev",
             "xsrf_cookies" : True,
-            "cookie_secret" : 'data.adicu.com',
+            "cookie_secret" : "32oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
             "template_path" : os.path.join(os.path.dirname(__file__), "templates"),
             "static_path" : os.path.join(os.path.dirname(__file__), "static"),
             "autoescape" : None,
+            "login_url" : "/login",
         }
 
         handlers = [
@@ -33,6 +35,8 @@ class Application(tornado.web.Application):
             (r"/affairs$", app.affairs.AffairsHandler),
             (r"/affairs/([^/]+)", app.affairs.AffairsHandler),
             (r"/athletics$", app.athletics.athleticsHandler),
+            (r"/login$", app.auth.LoginHandler),
+            (r"/logout$", app.auth.LogoutHandler),
         ]
         debug = True
         tornado.web.Application.__init__(self, handlers, **app_settings)
